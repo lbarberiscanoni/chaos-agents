@@ -57,7 +57,7 @@ class Network():
 		return reward
 
 
-infrastructure = Network(20, 300)
+infrastructure = Network(20, 40)
 infrastructure.initializeGraph()
 
 print("graph initalized")
@@ -94,6 +94,6 @@ for i in tqdm(range(1000000)):
 
 		#print(action, reward)
 
-agent.save_model("results/")
+agent.save_model("results/client-server")
 
 print(infrastructure.get_state().shape)

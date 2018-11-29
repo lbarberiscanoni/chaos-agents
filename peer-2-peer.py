@@ -1,6 +1,7 @@
 import networkx as nx
 from random import randint
 from tensorforce.agents import PPOAgent
+from tqdm import tqdm
 
 class Network():
 
@@ -13,13 +14,13 @@ class Network():
 		G = nx.Graph()
 
 		for peer in self.peers:
-			G.add_node(server)
+			G.add_node(peer)
 
 		for peer in self.peers:
 
 			#this makes sure that each client is only connected to 1 server
 			randNum = randint(0, len(self.peers) - 1)
-			G.add_edge(self.peers[randNum], peers)
+			G.add_edge(self.peers[randNum], peer)
 
 		self.graph = G
 		self.attempts = 0
@@ -55,6 +56,8 @@ class Network():
 infrastructure = Network(20)
 infrastructure.initializeGraph()
 
+print("graph initialized")
+
 # Create a Proximal Policy Optimization agent
 agent = PPOAgent(
     states={"type":'float', "shape": infrastructure.get_state().shape },
@@ -69,11 +72,13 @@ agent = PPOAgent(
     ],
 )
 
+print("agent made")
+
 #training
-for i in range(100):
+for i in tqdm(range(1000000)):
 	infrastructure.initializeGraph()
 	while infrastructure.attempts < len(infrastructure.peers):
-		print("epoch", str(i), "attempt", str(infrastructure.attempts))
+		#print("epoch", str(i), "attempt", str(infrastructure.attempts))
 		state = infrastructure.get_state()
 
 		action = agent.act(state)
@@ -86,4 +91,8 @@ for i in range(100):
 		else:
 			agent.observe(reward=reward, terminal=True)
 
-		print(action, reward)
+		#print(action, reward)
+
+agent.save_model("results/peer-2-peer")
+
+print(infrastructure.get_state().shape)
