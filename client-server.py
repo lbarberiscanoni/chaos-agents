@@ -57,7 +57,7 @@ class Network():
 		return reward
 
 
-infrastructure = Network(10000, 100000)
+infrastructure = Network(20, 300)
 infrastructure.initializeGraph()
 
 print("graph initalized")
@@ -71,8 +71,6 @@ agent = PPOAgent(
     network=[
 	    dict(type='flatten'),
 	    dict(type="dense", size=32),
-	   	dict(type="dense", size=32),
-	   	dict(type="dense", size=32)
     ],
 )
 
@@ -81,7 +79,7 @@ print("agent made")
 for i in tqdm(range(1000000)):
 	infrastructure.initializeGraph()
 	while infrastructure.attempts < len(infrastructure.servers):
-		print("epoch", str(i), "attempt", str(infrastructure.attempts))
+		#print("epoch", str(i), "attempt", str(infrastructure.attempts))
 		state = infrastructure.get_state()
 
 		action = agent.act(state)
@@ -94,7 +92,7 @@ for i in tqdm(range(1000000)):
 		else:
 			agent.observe(reward=reward, terminal=True)
 
-		print(action, reward)
+		#print(action, reward)
 
 agent.save_model("results/")
 
