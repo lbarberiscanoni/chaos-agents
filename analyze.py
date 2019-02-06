@@ -16,7 +16,7 @@ for monkey in options:
 # monkey = "ppo"
 	data = {}
 	for option in options:
-		with open("results/client-server/" + monkey + "_" + option + ".txt", "r") as f:
+		with open("results/peer-2-peer/" + monkey + "_" + option + ".txt", "r") as f:
 			txt = pickle.load(f)
 			data[option] = txt
 
@@ -30,7 +30,7 @@ for monkey in options:
 		ax.plot(x, data[option], label=option)
 
 	ax.legend()
-	plt.savefig("results/client-server/gan-" + monkey + ".png")
+	plt.savefig("results/peer-2-peer/gan-" + monkey + ".png")
 
 	for option in options:
 		print(option, np.median(data[option]), mean_confidence_interval(data[option]))
